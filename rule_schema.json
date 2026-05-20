@@ -1,0 +1,300 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MonthlyIncentivePlanRule",
+  "description": "每月激励方案的结构化规则定义，作为'理解规则'和'计算'两个 Skill 之间的数据契约",
+  "version": "1.1.0",
+  "type": "object",
+  "required": ["plan_id", "plan_name", "plan_type", "effective_month", "employee_scope", "calculation_rule", "data_source_mapping"],
+  "properties": {
+    "plan_id": {
+      "type": "string",
+      "description": "方案唯一标识，多方案并行时用于关联和排重"
+    },
+    "plan_name": {
+      "type": "string",
+      "description": "方案名称，如'5月续费激励'"
+    },
+    "plan_type": {
+      "type": "string",
+      "description": "业务类型：续费/转介绍/服务/拓科等"
+    },
+    "effective_month": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}$",
+      "description": "生效月份，格式 YYYY-MM"
+    },
+    "employee_scope": {
+      "type": "object",
+      "description": "激励适用的员工范围",
+      "required": ["role"],
+      "properties": {
+        "role": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["LP", "CC"],
+            "description": "LP=班主任，CC=销售。方案文档中出现的'班主任'、'服务老师'等统一映射为LP；'课程顾问'、'销售'等统一映射为CC"
+          },
+          "description": "适用岗位，LP和CC为标准编码，理解规则 Skill 应将方案原文中的岗位称呼统一映射到这两个编码"
+        },
+        "department": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "适用部门列表，可选"
+        },
+        "exclude": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "排除的员工编号列表，可选"
+        },
+        "specific_employees": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "明确指定激励对象姓名（owner 激励用）。出现则仅这些人进入结果集，但 role 仍应保留（用于员工角色校验）"
+        }
+      }
+    },
+    "data_scope": {
+      "type": "object",
+      "description": "plan 级默认数据口径。individual=每员工自己的行数据；aggregate=使用汇总行数据。item 级可通过 data_scope_override 覆盖",
+      "properties": {
+        "mode": { "type": "string", "enum": ["individual", "aggregate"], "default": "individual", "description": "individual=每员工自己行数据; aggregate=汇总行数据" },
+        "aggregate_key": { "type": "string", "description": "aggregate 模式的业务关键字（如'海外团队'/'台湾组'），由 column_mapping.aggregate_row_mapping 翻译到具体报表行" }
+      },
+      "default": { "mode": "individual" }
+    },
+    "prerequisites": {
+      "type": "array",
+      "description": "全局前置门槛条件，满足所有条件才可参与激励",
+      "items": {
+        "type": "object",
+        "required": ["field", "operator", "value"],
+        "properties": {
+          "field": { "type": "string", "description": "条件对应的字段名（映射后的）" },
+          "operator": { "type": "string", "enum": ["==", "!=", ">=", "<=", ">", "<", "in"] },
+          "value": { "description": "条件值，类型取决于 operator" }
+        }
+      },
+      "default": []
+    },
+    "calculation_rule": {
+      "type": "object",
+      "required": ["method"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["ratio_based", "tiered_commission", "fixed_bonus", "per_unit", "rank_tiered"],
+          "description": "计算方法类型。rank_tiered=排名档位激励（达成门槛后按排名给不同金额，如第一名500/第二名400）"
+        },
+        "capping": {
+          "type": "object",
+          "description": "封顶规则，可选",
+          "properties": {
+            "max_amount": { "type": "number", "description": "封顶金额" },
+            "max_quantity": { "type": "integer", "description": "封顶数量（per_unit专用）" }
+          }
+        },
+        "rounding_rule": {
+          "type": "object",
+          "description": "取整规则。薪酬要求所有激励计算结果保留两位小数向上取整，默认值即为此规则，除非方案文档明确指定例外",
+          "default": { "direction": "up", "precision": 2 },
+          "properties": {
+            "direction": {
+              "type": "string",
+              "enum": ["up", "down", "half_up", "none"],
+              "default": "up",
+              "description": "取整方向：up=向上取整，down=向下取整，half_up=四舍五入，none=不取整"
+            },
+            "precision": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 2,
+              "description": "保留小数位数，0表示取整到整数"
+            }
+          },
+          "required": ["direction", "precision"]
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "method": { "const": "ratio_based" },
+            "items": {
+              "type": "array",
+              "description": "并列子项列表，每项独立按达标率×基数计算",
+              "items": {
+                "type": "object",
+                "required": ["name", "base_amount", "target_field", "target_value"],
+                "properties": {
+                  "name": { "type": "string", "description": "子项名称" },
+                  "base_amount": { "type": "number", "description": "基数金额" },
+                  "target_field": { "type": "string", "description": "映射后的指标字段名" },
+                  "target_value": { "type": "number", "description": "目标值/达标线" },
+                  "data_scope_override": {
+                    "type": "object",
+                    "description": "覆盖 plan 级 data_scope。当某个 item 的指标口径与 plan 默认不同时使用",
+                    "properties": {
+                      "mode": { "type": "string", "enum": ["individual", "aggregate"] },
+                      "aggregate_key": { "type": "string" }
+                    }
+                  }
+                }
+              },
+              "minItems": 1
+            }
+          },
+          "required": ["items"]
+        },
+        {
+          "properties": {
+            "method": { "const": "tiered_commission" },
+            "tiers": {
+              "type": "array",
+              "description": "阶梯档位定义，按业绩金额分档提成",
+              "items": {
+                "type": "object",
+                "required": ["min", "rate"],
+                "properties": {
+                  "min": { "type": "number", "description": "档位下限（含）" },
+                  "max": { "type": ["number", "null"], "description": "档位上限（不含），null表示无上限" },
+                  "rate": { "type": "number", "description": "提成比例" }
+                }
+              }
+            },
+            "performance_field": {
+              "type": "string",
+              "description": "映射后的业绩金额字段名"
+            },
+            "data_scope_override": {
+              "type": "object",
+              "description": "覆盖 plan 级 data_scope。当某计算方法的指标口径与 plan 默认不同时使用",
+              "properties": {
+                "mode": { "type": "string", "enum": ["individual", "aggregate"] },
+                "aggregate_key": { "type": "string" }
+              }
+            },
+            "deductions": {
+              "type": "array",
+              "description": "扣减规则，可选",
+              "items": {
+                "type": "object",
+                "required": ["name", "field", "rate"],
+                "properties": {
+                  "name": { "type": "string", "description": "扣减项名称" },
+                  "field": { "type": "string", "description": "映射后的扣减数据字段名" },
+                  "rate": { "type": "number", "description": "扣减比例，1.0表示全额扣" }
+                }
+              },
+              "default": []
+            }
+          },
+          "required": ["tiers", "performance_field"]
+        },
+        {
+          "properties": {
+            "method": { "const": "fixed_bonus" },
+            "amount": { "type": "number", "description": "固定奖金金额" },
+            "data_scope_override": {
+              "type": "object",
+              "description": "覆盖 plan 级 data_scope",
+              "properties": {
+                "mode": { "type": "string", "enum": ["individual", "aggregate"] },
+                "aggregate_key": { "type": "string" }
+              }
+            },
+            "condition": {
+              "type": "object",
+              "description": "达成条件，结构化可验证",
+              "required": ["field", "operator", "value"],
+              "properties": {
+                "field": { "type": "string", "description": "映射后的条件字段名" },
+                "operator": { "type": "string", "enum": ["==", "!=", ">=", "<=", ">", "<", "in"] },
+                "value": { "description": "条件值" }
+              }
+            }
+          },
+          "required": ["amount", "condition"]
+        },
+        {
+          "properties": {
+            "method": { "const": "per_unit" },
+            "unit_price": { "type": "number", "description": "单价/单件佣金" },
+            "quantity_field": { "type": "string", "description": "映射后的数量字段名" },
+            "data_scope_override": {
+              "type": "object",
+              "description": "覆盖 plan 级 data_scope",
+              "properties": {
+                "mode": { "type": "string", "enum": ["individual", "aggregate"] },
+                "aggregate_key": { "type": "string" }
+              }
+            }
+          },
+          "required": ["unit_price", "quantity_field"]
+        },
+        {
+          "properties": {
+            "method": { "const": "rank_tiered" },
+            "qualifier": {
+              "type": "object",
+              "description": "达标门槛，所有员工先满足此条件才进入排名（如统合早鸟续费率≥30%）",
+              "required": ["field", "operator", "value"],
+              "properties": {
+                "field": { "type": "string", "description": "门槛字段名" },
+                "operator": { "type": "string", "enum": ["==", "!=", ">=", "<=", ">", "<"] },
+                "value": { "description": "门槛值" }
+              }
+            },
+            "rank_field": {
+              "type": "string",
+              "description": "排名字段，按此字段降序（默认）确定排名"
+            },
+            "rank_order": {
+              "type": "string",
+              "enum": ["desc", "asc"],
+              "default": "desc",
+              "description": "排名方向：desc=值越大排名越前（默认），asc=值越小排名越前"
+            },
+            "rank_rewards": {
+              "type": "array",
+              "description": "排名档位金额，按 rank=1 起始顺序排列",
+              "items": {
+                "type": "object",
+                "required": ["rank", "amount"],
+                "properties": {
+                  "rank": { "type": "integer", "minimum": 1, "description": "排名（1=第一名）" },
+                  "amount": { "type": "number", "description": "该名次的奖金金额" }
+                }
+              },
+              "minItems": 1
+            },
+            "tiebreaker_field": {
+              "type": "string",
+              "description": "同分时的次级排序字段，可选"
+            },
+            "data_scope_override": {
+              "type": "object",
+              "description": "覆盖 plan 级 data_scope",
+              "properties": {
+                "mode": { "type": "string", "enum": ["individual", "aggregate"] },
+                "aggregate_key": { "type": "string" }
+              }
+            }
+          },
+          "required": ["qualifier", "rank_field", "rank_rewards"]
+        }
+      ]
+    },
+    "data_source_mapping": {
+      "type": "object",
+      "description": "报表字段映射：指定每个字段从哪张报表的哪一列取值",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["report", "column"],
+        "properties": {
+          "report": { "type": "string", "description": "来源报表名称" },
+          "column": { "type": "string", "description": "报表中的列名" }
+        }
+      }
+    }
+  }
+}

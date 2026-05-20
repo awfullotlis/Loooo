@@ -1,0 +1,298 @@
+{
+  "新生跟进报表": {
+    "read_config": {
+      "header_rows": 3,
+      "data_start_row": 4,
+      "id_column_override": "LP姓名"
+    },
+    "column_reconcile": {
+      "员工编号": "LP姓名",
+      "首通及时跟进率": "及时跟进率_1"
+    }
+  },
+  "学管服务指标报表": {
+    "read_config": {
+      "header_rows": 2,
+      "data_start_row": 3,
+      "id_column_override": "LP名称"
+    },
+    "column_reconcile": {
+      "员工编号": "LP名称",
+      "出勤率": "总完课率",
+      "首课及时跟进率": "首课及时跟进率",
+      "首专及时跟进率": "首专及时跟进率"
+    }
+  },
+  "服务池跟进质量报表": {
+    "read_config": {
+      "header_rows": 4,
+      "data_start_row": 5,
+      "id_column_override": "LP"
+    },
+    "column_reconcile": {
+      "员工编号": "LP",
+      "语义点执行率加和得分": "语义点执行率加和"
+    }
+  },
+  "停课唤醒报表": {
+    "read_config": {
+      "header_rows": 6,
+      "data_start_row": 7,
+      "id_column_override": "LP个人"
+    },
+    "column_reconcile": {
+      "员工编号": "LP个人",
+      "停课唤醒目标学员外呼跟进率": "外呼跟进率_1"
+    }
+  },
+  "统合早鸟续费率报表": {
+    "read_config": {
+      "header_rows": 4,
+      "data_start_row": 5,
+      "id_column_override": "LP个人"
+    },
+    "column_reconcile": {
+      "员工编号": "LP个人",
+      "统合早鸟续费率": "目前续费率_1",
+      "统合早鸟续费率涨幅": "月累计涨幅_1",
+      "统合早鸟池子数": "汇总_池子数",
+      "统合早鸟池子学员数": "汇总_池子数",
+      "池子数": "汇总_池子数",
+      "月初续费人数": "月初续费人数_1",
+      "累计续费人数": "累计续费人数_1"
+    }
+  },
+  "统合升舱续费率报表": {
+    "read_config": {
+      "header_rows": 4,
+      "data_start_row": 5,
+      "id_column_override": "LP个人"
+    },
+    "column_reconcile": {
+      "员工编号": "LP个人",
+      "统合升舱续费率": "目前续费率",
+      "统合升舱续费率涨幅": "月累计涨幅"
+    }
+  },
+  "早鸟续费率报表": {
+    "read_config": {
+      "header_rows": 4,
+      "data_start_row": 5,
+      "id_column_override": "LP个人"
+    },
+    "column_reconcile": {
+      "员工编号": "LP个人",
+      "早鸟续费率": "目前续费率",
+      "早鸟续费率涨幅": "月累计涨幅",
+      "早鸟池子数": "池子数"
+    }
+  },
+  "升舱续费率报表": {
+    "read_config": {
+      "header_rows": 4,
+      "data_start_row": 5,
+      "id_column_override": "LP个人"
+    },
+    "column_reconcile": {
+      "员工编号": "LP个人",
+      "升舱续费率": "目前续费率_1",
+      "升舱续费率涨幅": "月累计涨幅_1",
+      "一续升舱续费率": "目前续费率_1",
+      "池子数": "汇总_池子数",
+      "月初续费人数": "月初续费人数_1",
+      "累计续费人数": "累计续费人数_1"
+    }
+  },
+  "统合结课续费率报表": {
+    "read_config": {
+      "header_rows": 5,
+      "data_start_row": 6,
+      "id_column_override": "LP个人"
+    },
+    "column_reconcile": {
+      "员工编号": "LP个人",
+      "统合次月结课续费率": "当前续费率加总",
+      "统合次月结课续费率涨幅": "2026-04-01_月涨幅",
+      "统合当月结课增长率": "2026-04-01_月涨幅",
+      "一续当月结课续费率": "当前续费率加总",
+      "次月结课统合续费率涨幅": "2026-04-01_月涨幅",
+      "统合次月结课增长率": "2026-04-01_月涨幅",
+      "统合次月结课池子学员数": "渠道二级分类_池子数",
+      "池子数": "渠道二级分类_池子数",
+      "月初续费人数": "全部_月初续费人数",
+      "累计续费人数": "累计续费人数_1"
+    }
+  },
+  "近三月结课续费率报表": {
+    "read_config": {
+      "header_rows": 5,
+      "data_start_row": 6,
+      "id_column_override": "LP个人"
+    },
+    "column_reconcile": {
+      "员工编号": "LP个人",
+      "近三月结课续费率": "全部_当前续费率",
+      "近三月结课续费率涨幅": "月涨幅_1",
+      "一续近三月结课增长率": "月涨幅_1",
+      "池子数": "2026-04-01_池子数",
+      "月初续费人数": "思维续费池_月初续费人数",
+      "累计续费人数": "一续池_累计续费人数"
+    }
+  },
+  "续费订单明细报表": {
+    "read_config": {
+      "header_rows": 6,
+      "data_start_row": 7,
+      "id_column_override": "业绩归属人名字"
+    },
+    "column_reconcile": {
+      "员工编号": "业绩归属人名字"
+    }
+  },
+  "field_redirect": {
+    "first_class_followup_rate": {
+      "from_report": "新生跟进报表",
+      "to_report": "学管服务指标报表",
+      "actual_column": "首课及时跟进率"
+    },
+    "first_major_followup_rate": {
+      "from_report": "新生跟进报表",
+      "to_report": "学管服务指标报表",
+      "actual_column": "首专及时跟进率"
+    }
+  },
+  "aggregate_row_mapping": {
+    "新生跟进报表": {
+      "match_column": "LP小组",
+      "id_column": "LP姓名",
+      "id_value": "总计",
+      "keys": {
+        "海外团队": { "match_value": "海外教学服务部", "match_type": "exact" }
+      }
+    },
+    "学管服务指标报表": {
+      "match_column": "团队",
+      "id_column": "LP名称",
+      "id_value": "总计",
+      "keys": {
+        "海外团队": { "match_value": "海外团队", "match_type": "exact" },
+        "台湾组": { "match_value": "台湾组", "match_type": "exact" },
+        "港澳1组": { "match_value": "港澳1组", "match_type": "exact" }
+      }
+    },
+    "服务池跟进质量报表": {
+      "match_column": "小组",
+      "id_column": "LP",
+      "id_value": "总计",
+      "keys": {
+        "海外团队": { "match_value": "海外团队", "match_type": "exact" },
+        "台湾组": { "match_value": "台湾组", "match_type": "exact" }
+      }
+    },
+    "停课唤醒报表": {
+      "match_column": "lp组别",
+      "id_column": "LP个人",
+      "id_value": "总计",
+      "keys": {
+        "海外团队": { "match_value": "海外团队", "match_type": "exact" },
+        "台湾组":   { "match_value": "台湾组",   "match_type": "exact" },
+        "港澳1组":  { "match_value": "港澳1组",  "match_type": "exact" },
+        "港澳2组":  { "match_value": "港澳2组",  "match_type": "exact" },
+        "美澳4组":  { "match_value": "美澳4组",  "match_type": "exact" }
+      }
+    },
+    "统合早鸟续费率报表": {
+      "match_column": "大区",
+      "id_column": "LP个人",
+      "id_value": "总计",
+      "keys": {
+        "海外团队":     { "match_value": "海外团队", "match_type": "exact" },
+        "非港澳台团队": { "match_value": "海外团队", "match_type": "exact" },
+        "港澳台":       { "match_value": "港澳",     "match_type": "exact", "id_value": "地区" },
+        "港澳":         { "match_value": "港澳",     "match_type": "exact", "id_value": "地区" },
+        "台湾":         { "match_value": "台湾",     "match_type": "exact", "id_value": "地区" },
+        "欧美澳":       { "match_value": "欧美澳",   "match_type": "exact", "id_value": "地区" },
+        "美澳4组":      { "match_value": "美澳4组",  "match_type": "exact" },
+        "港澳组":       { "match_value": "港澳组",   "match_type": "exact" }
+      }
+    },
+    "统合升舱续费率报表": {
+      "match_column": "大区",
+      "id_column": "LP个人",
+      "id_value": "总计",
+      "keys": {
+        "海外团队": { "match_value": "海外团队", "match_type": "exact" },
+        "港澳":     { "match_value": "港澳",     "match_type": "exact", "id_value": "地区" },
+        "台湾":     { "match_value": "台湾",     "match_type": "exact", "id_value": "地区" },
+        "欧美澳":   { "match_value": "欧美澳",   "match_type": "exact", "id_value": "地区" },
+        "美澳4组":  { "match_value": "美澳4组",  "match_type": "exact" },
+        "港澳组":   { "match_value": "港澳组",   "match_type": "exact" }
+      }
+    },
+    "升舱续费率报表": {
+      "match_column": "大区",
+      "id_column": "LP个人",
+      "id_value": "总计",
+      "keys": {
+        "海外团队": { "match_value": "海外团队", "match_type": "exact" },
+        "港澳":     { "match_value": "港澳",     "match_type": "exact", "id_value": "地区" },
+        "台湾":     { "match_value": "台湾",     "match_type": "exact", "id_value": "地区" },
+        "欧美澳":   { "match_value": "欧美澳",   "match_type": "exact", "id_value": "地区" },
+        "美澳4组":  { "match_value": "美澳4组",  "match_type": "exact" },
+        "港澳组":   { "match_value": "港澳组",   "match_type": "exact" }
+      }
+    },
+    "早鸟续费率报表": {
+      "match_column": "大区",
+      "id_column": "LP个人",
+      "id_value": "总计",
+      "keys": {
+        "海外团队": { "match_value": "海外团队", "match_type": "exact" },
+        "港澳":     { "match_value": "港澳",     "match_type": "exact", "id_value": "地区" },
+        "台湾":     { "match_value": "台湾",     "match_type": "exact", "id_value": "地区" },
+        "欧美澳":   { "match_value": "欧美澳",   "match_type": "exact", "id_value": "地区" }
+      }
+    },
+    "统合结课续费率报表": {
+      "match_column": "小组",
+      "id_column": "LP个人",
+      "id_value": "总计",
+      "keys": {
+        "海外团队": { "match_value": "海外团队", "match_type": "exact" },
+        "港澳":     { "match_value": "港澳",     "match_type": "exact", "id_value": "地区" },
+        "台湾":     { "match_value": "台湾",     "match_type": "exact", "id_value": "地区" },
+        "欧美澳":   { "match_value": "欧美澳",   "match_type": "exact", "id_value": "地区" },
+        "美澳4组":  { "match_value": "美澳4组",  "match_type": "exact" },
+        "港澳组":   { "match_value": "港澳组",   "match_type": "exact" }
+      }
+    },
+    "近三月结课续费率报表": {
+      "match_column": "小组",
+      "id_column": "LP个人",
+      "id_value": "总计",
+      "keys": {
+        "海外团队": { "match_value": "海外团队", "match_type": "exact" },
+        "港澳":     { "match_value": "港澳",     "match_type": "exact", "id_value": "地区" },
+        "台湾":     { "match_value": "台湾",     "match_type": "exact", "id_value": "地区" },
+        "欧美澳":   { "match_value": "欧美澳",   "match_type": "exact", "id_value": "地区" },
+        "美澳4组":  { "match_value": "美澳4组",  "match_type": "exact" },
+        "港澳组":   { "match_value": "港澳组",   "match_type": "exact" }
+      }
+    }
+  },
+  "composite_keys": {
+    "广州": {
+      "parent": "港澳",
+      "exclude": ["港澳组"],
+      "sum_fields": ["池子数", "月初续费人数", "累计续费人数"],
+      "derived_fields": {
+        "目前续费率": { "formula": "divide", "numerator": "累计续费人数", "denominator": "池子数" },
+        "月初续费率": { "formula": "divide", "numerator": "月初续费人数", "denominator": "池子数" },
+        "月累计涨幅": { "formula": "subtract", "a": "目前续费率", "b": "月初续费率" },
+        "当前续费率加总": { "formula": "divide", "numerator": "累计续费人数", "denominator": "池子数" },
+        "当前续费率": { "formula": "divide", "numerator": "累计续费人数", "denominator": "池子数" },
+        "月涨幅": { "formula": "subtract", "a": "当前续费率", "b": "月初续费率" }
+      }
+    }
+  }
+}
